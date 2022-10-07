@@ -39,6 +39,11 @@ contract TravelSaver {
      ***** ***** STATE-VARIABLES ***** *****
      */
 
+    // modifier onlyOwner() {
+    //     require(msg.sender == owner);
+    //     _;
+    // }
+
     address public immutable operatorWallet;
     IERC20 public immutable token;
 
@@ -78,7 +83,7 @@ contract TravelSaver {
      ***** ***** EVENTS ***** *****
      */
 
-    event CreateTravelPlan(
+    event CreatedTravelPlan(
         uint256 indexed ID,
         address indexed owner,
         TravelPlan travelPlan
@@ -93,7 +98,7 @@ contract TravelSaver {
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
 
-    event CreatePaymentPlan(
+    event CreatedPaymentPlan(
         uint256 indexed ID,
         address indexed owner,
         PaymentPlan paymentPlan
@@ -125,8 +130,26 @@ contract TravelSaver {
      ***** ***** STATE-CHANGING-EXTERNAL-FUNCTIONS ***** *****
      */
 
+    function createTravelPaymentPlan(
+        uint256 operatorPlanID_,
+        uint256 operatorUserID_,
+        uint256 amountPerInterval,
+        uint256 totalIntervals,
+        uint256 intervalLength
+    ) external returns (uint256 travelPlanID, uint256 paymentPlanID) {
+        travelPlanID = createTravelPlan(operatorPlanID_, operatorUserID_);
+        paymentPlanID = createPaymentPlan(
+            travelPlanID,
+            amountPerInterval,
+            totalIntervals,
+            intervalLength
+        );
+        return (travelPlanID, paymentPlanID);
+    }
+
     function createTravelPlan(uint256 operatorPlanID_, uint256 operatorUserID_)
-        external
+        public
+        returns (uint256)
     {
         travelPlanCount += 1;
 
@@ -141,11 +164,12 @@ contract TravelSaver {
             claimed: false
         });
 
-        emit CreateTravelPlan(
+        emit CreatedTravelPlan(
             travelPlanCount,
             msg.sender,
             travelPlans[travelPlanCount]
         );
+        return travelPlanCount;
     }
 
     function contributeToTravelPlan(uint256 ID, uint256 amount) external {
@@ -180,7 +204,7 @@ contract TravelSaver {
         uint256 amountPerInterval,
         uint256 totalIntervals,
         uint256 intervalLength
-    ) external {
+    ) public returns (uint256) {
         uint256 totalToTransfer = amountPerInterval * totalIntervals;
         require(
             IERC20(token).allowance(msg.sender, address(this)) >=
@@ -204,7 +228,9 @@ contract TravelSaver {
         });
         _startInterval(id);
 
-        emit CreatePaymentPlan(id, msg.sender, paymentPlans[id]);
+        emit CreatedPaymentPlan(id, msg.sender, paymentPlans[id]);
+
+        return id;
     }
 
     function cancelPaymentPlan(uint256 ID) external {
