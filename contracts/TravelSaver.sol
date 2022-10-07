@@ -241,14 +241,12 @@ contract TravelSaver {
     }
 
     function runInterval(uint256 ID) external {
-        address caller = msg.sender;
-        _fulfillPaymentPlanInterval(ID, caller);
+        _fulfillPaymentPlanInterval(ID);
     }
 
     function runIntervals(uint256[] memory IDs) external {
-        address caller = msg.sender;
         for (uint256 i = 0; i < IDs.length; i++) {
-            _fulfillPaymentPlanInterval(IDs[i], caller);
+            _fulfillPaymentPlanInterval(IDs[i]);
         }
     }
 
@@ -294,7 +292,7 @@ contract TravelSaver {
         emit Transfer(caller, address(this), amount);
     }
 
-    function _fulfillPaymentPlanInterval(uint256 ID, address caller) internal {
+    function _fulfillPaymentPlanInterval(uint256 ID) internal {
         PaymentPlan memory plan = paymentPlans[ID];
 
         uint256 amountToTransfer = plan.amountPerInterval;
@@ -311,7 +309,7 @@ contract TravelSaver {
             _contributeToTravelPlan(
                 plan.travelPlanID,
                 amountToTransfer,
-                caller
+                sender
             );
 
             paymentPlans[ID].amountSent += amountToTransfer;
