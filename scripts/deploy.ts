@@ -1,22 +1,26 @@
 import { ethers } from "hardhat";
 
-const OWNER_ADDRESS = process.env.OWNER_ADDRESS;
-const USDC = "0xF631933E685441404012A558a95990dD6aB66096";
+const OWNER_ADDRESS = process.env.PUBLIC_ADDRESS;
+const cEUR = "0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F";
+const cUSD = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 const operatorWalletAddress = "0x2b5Fc7f001a173D49B29e34993bB2feF41Ccd803";
 
 async function main() {
   const deployer = OWNER_ADDRESS;
-  const usdc = USDC;
+  const currency = cUSD;
   const fw = operatorWalletAddress;
 
   console.log("Deploying contract with the account:", deployer);
 
   const TravelSaver = await ethers.getContractFactory("TravelSaver");
-  const travelSaver = await TravelSaver.deploy(usdc, fw);
+  const travelSaver = await TravelSaver.deploy(currency, fw);
 
   await travelSaver.deployed();
 
-  console.log("TravelSaver deployed to:", travelSaver.address);
+  console.log(
+    "TravelSaver cUSD in Alfajores, deployed to:",
+    travelSaver.address
+  );
 }
 
 main().catch((error) => {
