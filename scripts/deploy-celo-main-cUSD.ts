@@ -1,9 +1,8 @@
 import { ethers } from "hardhat";
 
-const OWNER_ADDRESS = process.env.PUBLIC_ADDRESS;
-const cEUR = "0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F";
-const cUSD = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
-const operatorWalletAddress = "0x2b5Fc7f001a173D49B29e34993bB2feF41Ccd803";
+const OWNER_ADDRESS = process.env.PUBLIC_ADDRESS_PROD;
+const cUSD = "0x765de816845861e75a25fca122bb6898b8b1282a";
+const operatorWalletAddress = "0x702D8Ef9255505378922F4A0206542a7DcF6947B";
 
 async function main() {
   const deployer = OWNER_ADDRESS;
@@ -18,7 +17,7 @@ async function main() {
   await travelSaver.deployed();
 
   console.log(
-    "TravelSaver cUSD in Alfajores, deployed to:",
+    "TravelSaver cUSD in celo main, deployed to:",
     travelSaver.address
   );
 }

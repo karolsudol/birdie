@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-const OWNER_ADDRESS = process.env.PUBLIC_ADDRESS;
+const OWNER_ADDRESS = process.env.PUBLIC_ADDRESS_TEST;
 const DAI = "0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F";
 const operatorWalletAddress = "0x2b5Fc7f001a173D49B29e34993bB2feF41Ccd803";
 
