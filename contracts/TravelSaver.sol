@@ -288,7 +288,7 @@ contract TravelSaver {
     }
 
     /**
-     * @dev allows to transfer ERC20 token to specific TravelPlan
+     * @dev allows to transfer ERC20 token to specific TravelPlan by anyone
      *
      * @param ID TravelPlan existing UUID
      * @param amount ERC20 token value defined by its decimals
@@ -309,7 +309,7 @@ contract TravelSaver {
     }
 
     /**
-     * @dev allows to transfer ERC20 token from specific TravelPlan to operators wallet to make a booking
+     * @dev allows to transfer ERC20 token from specific TravelPlan to operators wallet to make a booking only by the user/owner
      *
      * @param ID TravelPlan existing UUID
      * @param value ERC20 token value defined by its decimals
