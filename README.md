@@ -177,11 +177,11 @@ Follow the above diagram:
 
 ## Re-Deploying to a networks, tests and scripts:
 
-Two tools for each set of contracts are in `pkg`:
+- `npm install hardhat`
 
-- Foundry
-- HardHat
-  Follow their `README.md`
+- `npx hardhat coverage`
+
+- `npx hardhat run --network {NETWORK} scripts/deploy-{NETWORK}-{BRANCH}-{ERC20}.ts`
 
 ## Architecture: all services
 
