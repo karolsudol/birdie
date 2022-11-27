@@ -67,9 +67,9 @@ Follow the above diagram:
 
 - `createTravelPlan(uint256 operatorPlanID_, uint256 operatorUserID_`
 
-- `contributeToTravelPlan(uint256 UUID, uint256 amountUSD)`
+- `contributeToTravelPlan(uint256 UUID, uint256 amount)`
 
-- `claimTravelPlan(uint256 UUID)`
+- `claimTravelPlan(uint256 UUID, uint256 amount)`
 
 - `getTravelPlanDetails(uint256 UUID) returns (TravelPlan)`
 
@@ -188,6 +188,15 @@ Two tools for each set of contracts are in `pkg`:
 <br/>
 <p align="center">
 <img src="img/flyaway_web3_arch.png" width="625" alt="web3-arch">
+</a>
+</p>
+<br/>
+
+## TESTS COVERAGE
+
+<br/>
+<p align="center">
+<img src="img/coverage.png" >
 </a>
 </p>
 <br/>
