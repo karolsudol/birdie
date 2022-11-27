@@ -7,108 +7,6 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
  * @title Travel Saving Vault with Recurring Payments Scheduler
  */
 contract TravelSaver {
-    // ***** ***** STRUCTS ***** *****
-
-    /**
-     * @notice TravelPlan is a vault where users funds are retained until the booking
-     *
-     * @param owner user's wallet address, plan creator, who can transfer money out to operators wallet -> make a booking
-     * @param ID unique identifier within the contract generated sequencially
-     * @param operatorPlanID operator's reference booking identifier
-     * @param operatorUserID operator's reference user identifier
-     * @param contributedAmount current ammount available for a whithdrawal
-     * @param createdAt the creation date
-     * @param claimedAt last clamied date
-     * @param claimed true if it has been clamimed in the past
-     */
-    struct TravelPlan {
-        address owner;
-        uint256 ID;
-        uint256 operatorPlanID;
-        uint256 operatorUserID;
-        uint256 contributedAmount;
-        uint256 createdAt;
-        uint256 claimedAt;
-        bool claimed;
-    }
-
-    /**
-     * @notice PaymentPlan is a recurring payments scheduler that must target specific TravelPlan
-     *
-     * @param travelPlanID id reference to a vault id where funds will be sent to
-     * @param ID unique identifier within the contract generated sequencially
-     * @param totalAmount the planned value of a total savings to be scheduled
-     * @param amountSent the current state of all payments made
-     * @param amountPerInterval unit value of a specific ERC-20 token to be sent per each scheduled payment
-     * @param totalIntervals total number of scheduled payments
-     * @param intervalsProcessed cuurent number of processed payments
-     * @param nextTransferOn unix secs TS of a next scheduled payment due at
-     * @param interval current interval count
-     * @param sender the owner of the plan - might be different to the TravelPlan
-     * @param alive determined whether plan is active or cancelled
-     */
-    struct PaymentPlan {
-        uint256 travelPlanID;
-        uint256 ID;
-        uint256 totalAmount;
-        uint256 amountSent;
-        uint256 amountPerInterval;
-        uint256 totalIntervals;
-        uint256 intervalsProcessed;
-        uint256 nextTransferOn;
-        uint256 interval;
-        address sender;
-        bool alive;
-    }
-
-    // ***** ***** STATE-VARIABLES ***** *****
-
-    address public immutable operatorWallet; // hardcoded address of the operator wallet where funds are send from teh travel-plan
-    IERC20 public immutable token; // hardcoded address of the ERC20 stable token that serves a currency of the contract
-
-    uint256 travelPlanCount; // current number of contract's created travel-plans
-    uint256 paymentPlanCount; // current number of contract's created payment-plans
-
-    mapping(uint256 => TravelPlan) public travelPlans; // TravelPlan reference by ID
-    mapping(uint256 => PaymentPlan) paymentPlans; // PaymentPlan referenced by ID
-
-    // mapping(uint256 => mapping(address => uint256)) public contributedAmount; // ID
-
-    constructor(address ERC20_, address operatorWallet_) {
-        token = IERC20(ERC20_);
-        operatorWallet = operatorWallet_;
-    }
-
-    /**
-     ***** ***** VIEW-FUNCTIONS ***** *****
-     */
-
-    /**
-     * @notice receive Plans state
-     *
-     * @param ID uniqe plan's ID
-     */
-    function getTravelPlanDetails(uint256 ID)
-        external
-        view
-        returns (TravelPlan memory)
-    {
-        return travelPlans[ID];
-    }
-
-    /**
-     * @notice receive plans state
-     *
-     * @param ID uniqe plan's ID
-     */
-    function getPaymentPlanDetails(uint256 ID)
-        external
-        view
-        returns (PaymentPlan memory)
-    {
-        return paymentPlans[ID];
-    }
-
     // ***** ***** EVENTS ***** *****
 
     /**
@@ -141,8 +39,10 @@ contract TravelSaver {
      * @notice Emitted when a user makes a withdrawl towards a booking
      *
      * @param ID uniqe plan's ID
+     * @param owner address that received a transfer
+     * @param amount an ERC20 unit as per its decimals
      */
-    event ClaimTravelPlan(uint256 indexed ID);
+    event ClaimTravelPlan(uint256 indexed ID, address owner, uint256 amount);
 
     /**
      * @notice Emitted when a user makes a withdrawl towards a booking
@@ -217,6 +117,107 @@ contract TravelSaver {
         address indexed owner,
         PaymentPlan paymentPlan
     );
+    // ***** ***** STRUCTS ***** *****
+
+    /**
+     * @notice TravelPlan is a vault where users funds are retained until the booking
+     *
+     * @param owner user's wallet address, plan creator, who can transfer money out to operators wallet -> make a booking
+     * @param ID unique identifier within the contract generated sequencially
+     * @param operatorPlanID operator's reference booking identifier
+     * @param operatorUserID operator's reference user identifier
+     * @param contributedAmount current ammount available for a whithdrawal
+     * @param createdAt the creation date
+     * @param claimedAt last clamied date
+     * @param claimed true if it has been clamimed in the past
+     */
+    struct TravelPlan {
+        address owner;
+        uint256 ID;
+        uint256 operatorPlanID;
+        uint256 operatorUserID;
+        uint256 contributedAmount;
+        uint256 createdAt;
+        uint256 claimedAt;
+        bool claimed;
+    }
+
+    /**
+     * @notice PaymentPlan is a recurring payments scheduler that must target specific TravelPlan
+     *
+     * @param travelPlanID id reference to a vault id where funds will be sent to
+     * @param ID unique identifier within the contract generated sequencially
+     * @param totalAmount the planned value of a total savings to be scheduled
+     * @param amountSent the current state of all payments made
+     * @param amountPerInterval unit value of a specific ERC-20 token to be sent per each scheduled payment
+     * @param totalIntervals total number of scheduled payments
+     * @param intervalsProcessed cuurent number of processed payments
+     * @param nextTransferOn unix secs TS of a next scheduled payment due at
+     * @param interval current interval count
+     * @param sender the owner of the plan - might be different to the TravelPlan
+     * @param alive determined whether plan is active or cancelled
+     */
+    struct PaymentPlan {
+        uint256 travelPlanID;
+        uint256 ID;
+        uint256 totalAmount;
+        uint256 amountSent;
+        uint256 amountPerInterval;
+        uint256 totalIntervals;
+        uint256 intervalsProcessed;
+        uint256 nextTransferOn;
+        uint256 interval;
+        address sender;
+        bool alive;
+    }
+
+    // ***** ***** STATE-VARIABLES ***** *****
+
+    address public immutable operatorWallet; // hardcoded address of the operator wallet where funds are send from teh travel-plan
+    IERC20 public immutable token; // hardcoded address of the ERC20 stable token that serves a currency of the contract
+
+    uint256 travelPlanCount; // current number of contract's created travel-plans
+    uint256 paymentPlanCount; // current number of contract's created payment-plans
+
+    mapping(uint256 => TravelPlan) public travelPlans; // TravelPlan reference by ID
+    mapping(uint256 => PaymentPlan) public paymentPlans; // PaymentPlan referenced by ID
+
+    // mapping(uint256 => mapping(address => uint256)) public contributedAmount; // ID
+
+    constructor(address ERC20_, address operatorWallet_) {
+        token = IERC20(ERC20_);
+        operatorWallet = operatorWallet_;
+    }
+
+    /**
+     ***** ***** VIEW-FUNCTIONS ***** *****
+     */
+
+    /**
+     * @notice receive Plans state
+     *
+     * @param ID uniqe plan's ID
+     */
+    function getTravelPlanDetails(uint256 ID)
+        external
+        view
+        returns (TravelPlan memory)
+    {
+        return travelPlans[ID];
+    }
+
+    /**
+     * @notice receive plans state
+     *
+     * @param ID uniqe plan's ID
+     */
+    function getPaymentPlanDetails(uint256 ID)
+        external
+        view
+        returns (PaymentPlan memory)
+    {
+        return paymentPlans[ID];
+    }
 
     /**
      ***** ***** STATE-CHANGING-EXTERNAL-FUNCTIONS ***** *****
@@ -297,11 +298,10 @@ contract TravelSaver {
      */
     function contributeToTravelPlan(uint256 ID, uint256 amount) external {
         TravelPlan storage plan = travelPlans[ID];
-        require(block.timestamp >= plan.createdAt, "doesn't exist");
+        require(plan.ID == ID, "doesn't exist");
 
         plan.contributedAmount += amount;
 
-        // contributedAmount[ID][msg.sender] += amount;
         token.transferFrom(msg.sender, address(this), amount);
 
         emit ContributeToTravelPlan(ID, msg.sender, amount);
@@ -318,14 +318,14 @@ contract TravelSaver {
      */
     function claimTravelPlan(uint256 ID, uint256 value) external {
         TravelPlan storage plan = travelPlans[ID];
+        require(plan.ID == ID, "doesn't exist");
         require(plan.owner == msg.sender, "not owner");
-        require(plan.contributedAmount > 0, "nothing saved");
         require(plan.contributedAmount >= value, "insufficient funds");
         plan.contributedAmount -= value;
         token.transfer(operatorWallet, value);
         plan.claimed = true;
         plan.claimedAt = block.timestamp;
-        emit ClaimTravelPlan(ID);
+        emit ClaimTravelPlan(ID, msg.sender, value);
         emit Transfer(address(this), operatorWallet, value);
     }
 
@@ -351,8 +351,10 @@ contract TravelSaver {
         require(
             IERC20(token).allowance(msg.sender, address(this)) >=
                 totalToTransfer,
-            "IERC20: Insuff Approval"
+            "ERC20: insufficient allowance"
         );
+        TravelPlan memory plan = travelPlans[_travelPlanID];
+        require(plan.ID == _travelPlanID, "doesn't exist");
         uint256 id = ++paymentPlanCount;
 
         paymentPlans[id] = PaymentPlan({
@@ -462,7 +464,8 @@ contract TravelSaver {
         address caller
     ) internal {
         TravelPlan storage plan = travelPlans[ID];
-        require(block.timestamp >= plan.createdAt, "doesn't exist");
+        // require(block.timestamp >= plan.createdAt, "doesn't exist");
+        require(plan.ID == ID, "doesn't exist");
 
         plan.contributedAmount += amount;
 
