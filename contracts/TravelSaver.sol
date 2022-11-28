@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.17;
 
-// import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "/home/karolsudol/flywallet/TravelSaver/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+// import "/home/karolsudol/flywallet/TravelSaver/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title Travel Saving Vault with Recurring Payments Scheduler
