@@ -1,4 +1,4 @@
-# Travel Saver
+# BIRDIE
 
 ## WEB3 travel plan payment subsription escrow service
 
@@ -9,8 +9,7 @@
 
 <br/>
 <p align="center">
-<a href="https://flywallet.io" target="_blank">
-<img src="img/fw.jpeg" width="225" alt="fw logo">
+<img src="img/parrot.gif">
 </a>
 </p>
 <br/>
