@@ -7,7 +7,7 @@
 - deployed to test and main networks
 - `deployment scripts` for network specific `ERC20 token` and `destination address`
 - off chain payments integrators as below
-- real time RPC log consumer with ETL pipes and contact writer[vitalik] (https://github.com/karolsudol/vitalik)
+- real time RPC log consumer with ETL pipes and contact writer [vitalik](https://github.com/karolsudol/vitalik)
 
 <br/>
 <p align="center">
