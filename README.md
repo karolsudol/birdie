@@ -85,7 +85,7 @@ Follow the above diagram:
 
 - `runIntervals(uint256[] memory UUIDs)`
 
-## TravelPaymentPlan - create both in ine go for convenience
+## TravelPaymentPlan
 
 - `createTravelPaymentPlan(uint256 operatorPlanID_,uint256 operatorUserID_, uint256 amountPerInterval,uint256 totalIntervals,uint256 intervalLength)`
 
@@ -175,15 +175,10 @@ Follow the above diagram:
 
      - operatorWalletAddress: `0x702D8Ef9255505378922F4A0206542a7DcF6947B`
 
-## TravelPlan constructor params:
+## TravelSaver constructor params:
 
-- `address _IERC20` USDC netwrok specific address.
+- `address _IERC20` USD ERC20 network specific address.
 - `address _operatorWallet` wallet address where all funds will be transfered when saving plan is sucessful.
-
-## PaymentPlan constructor params:
-
-- `address _IERC20` USDC netwrok specific address.
-- `address payable _travelPlanContract` TravelPlan address as this contract needs call `contribute` func to send USDC to existing plan on TravelPlan.
 
 ## Re-Deploying to a networks, tests and scripts:
 
