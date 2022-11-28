@@ -50,7 +50,7 @@ const config: HardhatUserConfig = {
     },
     bsc_main: {
       url: bsc_main_URL || "",
-      chainId: 97,
+      // chainId: 97,
       gasPrice: 20000000000,
       accounts:
         process.env.PRIVATE_KEY_PROD !== undefined

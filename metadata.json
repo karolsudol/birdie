@@ -1,8 +1,1151 @@
-
-======= /home/karolsudol/flywallet/TravelSaver/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20 =======
-Metadata:
-{"compiler":{"version":"0.8.14-develop.2022.4.24+commit.55917405"},"language":"Solidity","output":{"abi":[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}],"devdoc":{"details":"Interface of the ERC20 standard as defined in the EIP.","events":{"Approval(address,address,uint256)":{"details":"Emitted when the allowance of a `spender` for an `owner` is set by a call to {approve}. `value` is the new allowance."},"Transfer(address,address,uint256)":{"details":"Emitted when `value` tokens are moved from one account (`from`) to another (`to`). Note that `value` may be zero."}},"kind":"dev","methods":{"allowance(address,address)":{"details":"Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called."},"approve(address,uint256)":{"details":"Sets `amount` as the allowance of `spender` over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an {Approval} event."},"balanceOf(address)":{"details":"Returns the amount of tokens owned by `account`."},"totalSupply()":{"details":"Returns the amount of tokens in existence."},"transfer(address,uint256)":{"details":"Moves `amount` tokens from the caller's account to `to`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."},"transferFrom(address,address,uint256)":{"details":"Moves `amount` tokens from `from` to `to` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."}},"version":1},"userdoc":{"kind":"user","methods":{},"version":1}},"settings":{"compilationTarget":{"/home/karolsudol/flywallet/TravelSaver/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol":"IERC20"},"evmVersion":"london","libraries":{},"metadata":{"bytecodeHash":"ipfs"},"optimizer":{"enabled":false,"runs":200},"remappings":[]},"sources":{"/home/karolsudol/flywallet/TravelSaver/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol":{"keccak256":"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b","license":"MIT","urls":["bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34","dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"]}},"version":1}
-
-======= contracts/TravelSaver.sol:TravelSaver =======
-Metadata:
-{"compiler":{"version":"0.8.14-develop.2022.4.24+commit.55917405"},"language":"Solidity","output":{"abi":[{"inputs":[{"internalType":"address","name":"ERC20_","type":"address"},{"internalType":"address","name":"operatorWallet_","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"},{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"components":[{"internalType":"uint256","name":"travelPlanID","type":"uint256"},{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"totalAmount","type":"uint256"},{"internalType":"uint256","name":"amountSent","type":"uint256"},{"internalType":"uint256","name":"amountPerInterval","type":"uint256"},{"internalType":"uint256","name":"totalIntervals","type":"uint256"},{"internalType":"uint256","name":"intervalsProcessed","type":"uint256"},{"internalType":"uint256","name":"nextTransferOn","type":"uint256"},{"internalType":"uint256","name":"interval","type":"uint256"},{"internalType":"address","name":"sender","type":"address"},{"internalType":"bool","name":"alive","type":"bool"}],"indexed":false,"internalType":"struct TravelSaver.PaymentPlan","name":"paymentPlan","type":"tuple"}],"name":"CancelPaymentPlan","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"}],"name":"ClaimTravelPlan","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"},{"indexed":true,"internalType":"address","name":"contributor","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ContributeToTravelPlan","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"},{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"components":[{"internalType":"uint256","name":"travelPlanID","type":"uint256"},{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"totalAmount","type":"uint256"},{"internalType":"uint256","name":"amountSent","type":"uint256"},{"internalType":"uint256","name":"amountPerInterval","type":"uint256"},{"internalType":"uint256","name":"totalIntervals","type":"uint256"},{"internalType":"uint256","name":"intervalsProcessed","type":"uint256"},{"internalType":"uint256","name":"nextTransferOn","type":"uint256"},{"internalType":"uint256","name":"interval","type":"uint256"},{"internalType":"address","name":"sender","type":"address"},{"internalType":"bool","name":"alive","type":"bool"}],"indexed":false,"internalType":"struct TravelSaver.PaymentPlan","name":"paymentPlan","type":"tuple"}],"name":"CreatedPaymentPlan","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"},{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"components":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"operatorPlanID","type":"uint256"},{"internalType":"uint256","name":"operatorUserID","type":"uint256"},{"internalType":"uint256","name":"contributedAmount","type":"uint256"},{"internalType":"uint256","name":"createdAt","type":"uint256"},{"internalType":"uint256","name":"claimedAt","type":"uint256"},{"internalType":"bool","name":"claimed","type":"bool"}],"indexed":false,"internalType":"struct TravelSaver.TravelPlan","name":"travelPlan","type":"tuple"}],"name":"CreatedTravelPlan","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"},{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"components":[{"internalType":"uint256","name":"travelPlanID","type":"uint256"},{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"totalAmount","type":"uint256"},{"internalType":"uint256","name":"amountSent","type":"uint256"},{"internalType":"uint256","name":"amountPerInterval","type":"uint256"},{"internalType":"uint256","name":"totalIntervals","type":"uint256"},{"internalType":"uint256","name":"intervalsProcessed","type":"uint256"},{"internalType":"uint256","name":"nextTransferOn","type":"uint256"},{"internalType":"uint256","name":"interval","type":"uint256"},{"internalType":"address","name":"sender","type":"address"},{"internalType":"bool","name":"alive","type":"bool"}],"indexed":false,"internalType":"struct TravelSaver.PaymentPlan","name":"paymentPlan","type":"tuple"}],"name":"EndPaymentPlan","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"},{"indexed":true,"internalType":"uint256","name":"intervalNo","type":"uint256"}],"name":"PaymentPlanIntervalEnded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"ID","type":"uint256"},{"indexed":true,"internalType":"uint256","name":"callableOn","type":"uint256"},{"indexed":true,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"intervalNo","type":"uint256"}],"name":"StartPaymentPlanInterval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"uint256","name":"ID","type":"uint256"}],"name":"cancelPaymentPlan","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ID","type":"uint256"}],"name":"claimTravelPlan","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"contributeToTravelPlan","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"}],"name":"contributedAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_travelPlanID","type":"uint256"},{"internalType":"uint256","name":"amountPerInterval","type":"uint256"},{"internalType":"uint256","name":"totalIntervals","type":"uint256"},{"internalType":"uint256","name":"intervalLength","type":"uint256"}],"name":"createPaymentPlan","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"operatorPlanID_","type":"uint256"},{"internalType":"uint256","name":"operatorUserID_","type":"uint256"},{"internalType":"uint256","name":"amountPerInterval","type":"uint256"},{"internalType":"uint256","name":"totalIntervals","type":"uint256"},{"internalType":"uint256","name":"intervalLength","type":"uint256"}],"name":"createTravelPaymentPlan","outputs":[{"internalType":"uint256","name":"travelPlanID","type":"uint256"},{"internalType":"uint256","name":"paymentPlanID","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"operatorPlanID_","type":"uint256"},{"internalType":"uint256","name":"operatorUserID_","type":"uint256"}],"name":"createTravelPlan","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ID","type":"uint256"}],"name":"getPaymentPlanDetails","outputs":[{"components":[{"internalType":"uint256","name":"travelPlanID","type":"uint256"},{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"totalAmount","type":"uint256"},{"internalType":"uint256","name":"amountSent","type":"uint256"},{"internalType":"uint256","name":"amountPerInterval","type":"uint256"},{"internalType":"uint256","name":"totalIntervals","type":"uint256"},{"internalType":"uint256","name":"intervalsProcessed","type":"uint256"},{"internalType":"uint256","name":"nextTransferOn","type":"uint256"},{"internalType":"uint256","name":"interval","type":"uint256"},{"internalType":"address","name":"sender","type":"address"},{"internalType":"bool","name":"alive","type":"bool"}],"internalType":"struct TravelSaver.PaymentPlan","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"ID","type":"uint256"}],"name":"getTravelPlanDetails","outputs":[{"components":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"operatorPlanID","type":"uint256"},{"internalType":"uint256","name":"operatorUserID","type":"uint256"},{"internalType":"uint256","name":"contributedAmount","type":"uint256"},{"internalType":"uint256","name":"createdAt","type":"uint256"},{"internalType":"uint256","name":"claimedAt","type":"uint256"},{"internalType":"bool","name":"claimed","type":"bool"}],"internalType":"struct TravelSaver.TravelPlan","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"operatorWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"ID","type":"uint256"}],"name":"runInterval","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"IDs","type":"uint256[]"}],"name":"runIntervals","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"token","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"travelPlans","outputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"ID","type":"uint256"},{"internalType":"uint256","name":"operatorPlanID","type":"uint256"},{"internalType":"uint256","name":"operatorUserID","type":"uint256"},{"internalType":"uint256","name":"contributedAmount","type":"uint256"},{"internalType":"uint256","name":"createdAt","type":"uint256"},{"internalType":"uint256","name":"claimedAt","type":"uint256"},{"internalType":"bool","name":"claimed","type":"bool"}],"stateMutability":"view","type":"function"}],"devdoc":{"kind":"dev","methods":{},"version":1},"userdoc":{"events":{"CreatedTravelPlan(uint256,address,(address,uint256,uint256,uint256,uint256,uint256,uint256,bool))":{"notice":"***** ***** EVENTS ***** *****"}},"kind":"user","methods":{"createTravelPaymentPlan(uint256,uint256,uint256,uint256,uint256)":{"notice":"***** ***** STATE-CHANGING-EXTERNAL-FUNCTIONS ***** *****"},"getTravelPlanDetails(uint256)":{"notice":"***** ***** VIEW-FUNCTIONS ***** *****"},"operatorWallet()":{"notice":"***** ***** STATE-VARIABLES ***** *****"}},"version":1}},"settings":{"compilationTarget":{"contracts/TravelSaver.sol":"TravelSaver"},"evmVersion":"london","libraries":{},"metadata":{"bytecodeHash":"ipfs"},"optimizer":{"enabled":false,"runs":200},"remappings":[]},"sources":{"/home/karolsudol/flywallet/TravelSaver/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol":{"keccak256":"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b","license":"MIT","urls":["bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34","dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"]},"contracts/TravelSaver.sol":{"keccak256":"0xc6e1fe567efddd8028891f33271b37a1f9c5006be31c926587afd3145a3303a9","license":"UNLICENSED","urls":["bzz-raw://3738984b398b69c755e82edfbda9b3718013151c02765fd8f186717606e1c213","dweb:/ipfs/QmSNoByxZPoeSwWHXeXy5s126kk3VUqHNxURWvFaXgi1Db"]}},"version":1}
+{
+  "compiler": {
+    "version": "0.8.17+commit.8df45f5f"
+  },
+  "language": "Solidity",
+  "output": {
+    "abi": [
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "ERC20_",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "operatorWallet_",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "travelPlanID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "ID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountSent",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountPerInterval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalIntervals",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "intervalsProcessed",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nextTransferOn",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "interval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              },
+              {
+                "internalType": "bool",
+                "name": "alive",
+                "type": "bool"
+              }
+            ],
+            "indexed": false,
+            "internalType": "struct TravelSaver.PaymentPlan",
+            "name": "paymentPlan",
+            "type": "tuple"
+          }
+        ],
+        "name": "CancelPaymentPlan",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "ClaimTravelPlan",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "contributor",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "ContributeToTravelPlan",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "travelPlanID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "ID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountSent",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountPerInterval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalIntervals",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "intervalsProcessed",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nextTransferOn",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "interval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              },
+              {
+                "internalType": "bool",
+                "name": "alive",
+                "type": "bool"
+              }
+            ],
+            "indexed": false,
+            "internalType": "struct TravelSaver.PaymentPlan",
+            "name": "paymentPlan",
+            "type": "tuple"
+          }
+        ],
+        "name": "CreatedPaymentPlan",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "ID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "operatorPlanID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "operatorUserID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "contributedAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "createdAt",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "claimedAt",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "claimed",
+                "type": "bool"
+              }
+            ],
+            "indexed": false,
+            "internalType": "struct TravelSaver.TravelPlan",
+            "name": "travelPlan",
+            "type": "tuple"
+          }
+        ],
+        "name": "CreatedTravelPlan",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "travelPlanID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "ID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountSent",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountPerInterval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalIntervals",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "intervalsProcessed",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nextTransferOn",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "interval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              },
+              {
+                "internalType": "bool",
+                "name": "alive",
+                "type": "bool"
+              }
+            ],
+            "indexed": false,
+            "internalType": "struct TravelSaver.PaymentPlan",
+            "name": "paymentPlan",
+            "type": "tuple"
+          }
+        ],
+        "name": "EndPaymentPlan",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "intervalNo",
+            "type": "uint256"
+          }
+        ],
+        "name": "PaymentPlanIntervalEnded",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "callableOn",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "intervalNo",
+            "type": "uint256"
+          }
+        ],
+        "name": "StartPaymentPlanInterval",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Transfer",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          }
+        ],
+        "name": "cancelPaymentPlan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "claimTravelPlan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "contributeToTravelPlan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_travelPlanID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountPerInterval",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalIntervals",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "intervalLength",
+            "type": "uint256"
+          }
+        ],
+        "name": "createPaymentPlan",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "operatorPlanID_",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "operatorUserID_",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountPerInterval",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalIntervals",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "intervalLength",
+            "type": "uint256"
+          }
+        ],
+        "name": "createTravelPaymentPlan",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "travelPlanID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "paymentPlanID",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "operatorPlanID_",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "operatorUserID_",
+            "type": "uint256"
+          }
+        ],
+        "name": "createTravelPlan",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          }
+        ],
+        "name": "getPaymentPlanDetails",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "travelPlanID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "ID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountSent",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountPerInterval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalIntervals",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "intervalsProcessed",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nextTransferOn",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "interval",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              },
+              {
+                "internalType": "bool",
+                "name": "alive",
+                "type": "bool"
+              }
+            ],
+            "internalType": "struct TravelSaver.PaymentPlan",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          }
+        ],
+        "name": "getTravelPlanDetails",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "ID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "operatorPlanID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "operatorUserID",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "contributedAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "createdAt",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "claimedAt",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "claimed",
+                "type": "bool"
+              }
+            ],
+            "internalType": "struct TravelSaver.TravelPlan",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "operatorWallet",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "paymentPlans",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "travelPlanID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountSent",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountPerInterval",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalIntervals",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "intervalsProcessed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nextTransferOn",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "interval",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "alive",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          }
+        ],
+        "name": "runInterval",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256[]",
+            "name": "IDs",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "runIntervals",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "token",
+        "outputs": [
+          {
+            "internalType": "contract IERC20",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "travelPlans",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "operatorPlanID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "operatorUserID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "contributedAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createdAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "claimedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "claimed",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    "devdoc": {
+      "events": {
+        "CancelPaymentPlan(uint256,address,(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,bool))": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "owner": "user who created it",
+            "paymentPlan": "a plan's details"
+          }
+        },
+        "ClaimTravelPlan(uint256,address,uint256)": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "amount": "an ERC20 unit as per its decimals",
+            "owner": "address that received a transfer"
+          }
+        },
+        "ContributeToTravelPlan(uint256,address,uint256)": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "amount": "an ERC20 unit as per its decimals",
+            "contributor": "address that made a transfer"
+          }
+        },
+        "CreatedPaymentPlan(uint256,address,(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,bool))": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "owner": "user who created it",
+            "paymentPlan": "a plan's details"
+          }
+        },
+        "CreatedTravelPlan(uint256,address,(address,uint256,uint256,uint256,uint256,uint256,uint256,bool))": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "owner": "user who created it",
+            "travelPlan": "a plan's details"
+          }
+        },
+        "EndPaymentPlan(uint256,address,(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,bool))": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "owner": "user who created it",
+            "paymentPlan": "a plan's details"
+          }
+        },
+        "PaymentPlanIntervalEnded(uint256,uint256)": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "intervalNo": "sequential scheduled payment count"
+          }
+        },
+        "StartPaymentPlanInterval(uint256,uint256,uint256,uint256)": {
+          "params": {
+            "ID": "uniqe plan's ID",
+            "amount": "an ERC20 unit as per its decimals",
+            "callableOn": "unix TS of next scheduled payment",
+            "intervalNo": "sequential scheduled payment count"
+          }
+        },
+        "Transfer(address,address,uint256)": {
+          "params": {
+            "amount": "an ERC20 unit as per its decimals",
+            "from": "address that made a transfer",
+            "to": "address that received a transfer"
+          }
+        }
+      },
+      "kind": "dev",
+      "methods": {
+        "cancelPaymentPlan(uint256)": {
+          "details": "cancelPaymentPlan cancels existing payment schedule before its plannned due date",
+          "params": {
+            "ID": "TravelPlan existing UUID Emits a {CancelPaymentPlan} event."
+          }
+        },
+        "claimTravelPlan(uint256,uint256)": {
+          "details": "allows to transfer ERC20 token from specific TravelPlan to operators wallet to make a booking only by the user/owner",
+          "params": {
+            "ID": "TravelPlan existing UUID",
+            "value": "ERC20 token value defined by its decimals Emits a {ClaimTravelPlan, Transfer} event."
+          }
+        },
+        "contributeToTravelPlan(uint256,uint256)": {
+          "details": "allows to transfer ERC20 token to specific TravelPlan by anyone",
+          "params": {
+            "ID": "TravelPlan existing UUID",
+            "amount": "ERC20 token value defined by its decimals Emits a {ContributeToTravelPlan, Transfer} event."
+          }
+        },
+        "createPaymentPlan(uint256,uint256,uint256,uint256)": {
+          "details": "creates a new payment plan targeting existing travel-plan along with its sheduled payments details",
+          "params": {
+            "_travelPlanID": "The plan id provided by the operator.",
+            "amountPerInterval": "unit value of a specific ERC-20 token to be sent per each scheduled payment",
+            "intervalLength": "time distance between each payments in seconds",
+            "totalIntervals": "total number of payments to be scheduled"
+          },
+          "returns": {
+            "_0": "id  a new sequential count based UUID Emits a {CreatedPaymentPlan} event."
+          }
+        },
+        "createTravelPaymentPlan(uint256,uint256,uint256,uint256,uint256)": {
+          "details": "create Travel Plan and New Payment Plan attached to it in one go",
+          "params": {
+            "amountPerInterval": "unit value of a specific ERC-20 token to be sent per each scheduled payment",
+            "intervalLength": "time distance between each payments in seconds",
+            "operatorPlanID_": "The plan id provided by the operator.",
+            "operatorUserID_": "The user id provided by the operator.",
+            "totalIntervals": "total number of payments to be scheduled"
+          },
+          "returns": {
+            "travelPlanID": "paymentPlanID new sequential count based UUIDs Emits a {CreatedTravelPlan, CreatedPaymentPlan} event."
+          }
+        },
+        "createTravelPlan(uint256,uint256)": {
+          "details": "create Travel Plan where user will store his/hers savings until the booking date",
+          "params": {
+            "operatorPlanID_": "The plan id provided by the operator.",
+            "operatorUserID_": "The user id provided by the operator."
+          },
+          "returns": {
+            "_0": "travelPlanCount  a new sequential count based UUID Emits a {CreatedTravelPlan} event."
+          }
+        },
+        "getPaymentPlanDetails(uint256)": {
+          "params": {
+            "ID": "uniqe plan's ID"
+          }
+        },
+        "getTravelPlanDetails(uint256)": {
+          "params": {
+            "ID": "uniqe plan's ID"
+          }
+        },
+        "runInterval(uint256)": {
+          "details": "runInterval executes scheduled payment",
+          "params": {
+            "ID": "PaymentPlan existing UUID"
+          }
+        },
+        "runIntervals(uint256[])": {
+          "details": "runIntervals executes scheduled payment as a batch",
+          "params": {
+            "IDs": "PaymentPlan existing UUIDs"
+          }
+        }
+      },
+      "title": "Travel Saving Vault with Recurring Payments Scheduler",
+      "version": 1
+    },
+    "userdoc": {
+      "events": {
+        "CancelPaymentPlan(uint256,address,(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,bool))": {
+          "notice": "Emitted when a PaymentPlan is cancelled before scheduled payments are made"
+        },
+        "ClaimTravelPlan(uint256,address,uint256)": {
+          "notice": "Emitted when a user makes a withdrawl towards a booking"
+        },
+        "ContributeToTravelPlan(uint256,address,uint256)": {
+          "notice": "Emitted when a token transfer is made to each TravelPlan"
+        },
+        "CreatedPaymentPlan(uint256,address,(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,bool))": {
+          "notice": "Emitted when a PaymentPlan is created"
+        },
+        "CreatedTravelPlan(uint256,address,(address,uint256,uint256,uint256,uint256,uint256,uint256,bool))": {
+          "notice": "Emitted when a TravelPlan is created"
+        },
+        "EndPaymentPlan(uint256,address,(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,bool))": {
+          "notice": "Emitted when a PaymentPlan has ended as scheduled, after last payment"
+        },
+        "PaymentPlanIntervalEnded(uint256,uint256)": {
+          "notice": "Emitted when a PaymentPlan scheduled payment has been sucessfully made"
+        },
+        "StartPaymentPlanInterval(uint256,uint256,uint256,uint256)": {
+          "notice": "Emitted when a PaymentPlan scheduled payment has been sucessfully made"
+        },
+        "Transfer(address,address,uint256)": {
+          "notice": "Emitted when a user makes a withdrawl towards a booking"
+        }
+      },
+      "kind": "user",
+      "methods": {
+        "getPaymentPlanDetails(uint256)": {
+          "notice": "receive plans state"
+        },
+        "getTravelPlanDetails(uint256)": {
+          "notice": "receive Plans state"
+        }
+      },
+      "version": 1
+    }
+  },
+  "settings": {
+    "compilationTarget": {
+      "contracts/TravelSaver.sol": "TravelSaver"
+    },
+    "evmVersion": "london",
+    "libraries": {},
+    "metadata": {
+      "bytecodeHash": "ipfs"
+    },
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "remappings": []
+  },
+  "sources": {
+    "@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
+        "dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
+      ]
+    },
+    "contracts/TravelSaver.sol": {
+      "keccak256": "0xa9379a6ea8919239e29e1e09ffbe6dc7c38292e93394ed67fdbc3d987af69236",
+      "license": "UNLICENSED",
+      "urls": [
+        "bzz-raw://d6931b82ef6a99287e1cc0d0ad53aecf85531b09a2233507354d8ad32de253f5",
+        "dweb:/ipfs/Qmbj4s4fNJ2sfQnVxSYFQthPmETp1VhCZF7XcCCZBpAZGE"
+      ]
+    }
+  },
+  "version": 1
+}
